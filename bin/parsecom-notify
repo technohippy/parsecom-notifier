@@ -1,0 +1,33 @@
+#!/usr/bin/env ruby
+require 'parsecom'
+require 'yaml'
+
+settings = YAML.load_file ARGF
+
+def iso8601 time
+  time.is_a?(Time) ? time.iso8601 : time
+end
+
+settings['pushes'].each do |setting|
+  message = setting['message'] || settings['message']
+  at = iso8601 setting['at']
+  condition = setting['condition'] || setting['conditions']
+
+  Parse::Push.send message, at: at, condition: proc {
+    condition.each do |key, val|
+      col = column key
+      val = {eq: val} unless val.is_a? Hash
+      if key =~ /At$/
+        val.each do |cond, v|
+          cond = :gte if cond == 'from'
+          cond = :lte if cond == 'to'
+          col.send cond, Parse::ParseDate.parse(iso8601(v))
+        end
+      else
+        val.each do |cond, v|
+          col.send cond, v
+        end
+      end
+    end
+  }
+end
