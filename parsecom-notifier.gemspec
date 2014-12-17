@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |spec|
   spec.name          = "parsecom-notifier"
-  spec.version       = '0.0'
+  spec.version       = '0.1'
   spec.authors       = ["ANDO Yasushi"]
   spec.email         = ["andyjpn@gmail.com"]
   spec.summary       = %q{Register Pushes}

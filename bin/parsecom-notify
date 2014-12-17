@@ -2,7 +2,7 @@
 require 'parsecom'
 require 'yaml'
 
-settings = YAML.load_file ARGF
+settings = YAML.load ARGF
 
 def iso8601 time
   time.is_a?(Time) ? time.iso8601 : time
